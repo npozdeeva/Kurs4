@@ -54,11 +54,6 @@ class Connector:
         """
         Запись данных в файл с сохранением структуры и исходных данных
         """
-        # self.__connect()
-        # with open('df.json', encoding='utf-8') as f:
-        #     data = json.load(f)
-        #     with open('df.json', encoding='utf-8') as outfile:
-        #         json.dump(data, outfile, ensure_ascii=False)
         with open(self.__data_file, 'r', encoding='utf-8') as f:
             file_data = json.load(f)
         if type(data) == dict:
@@ -95,19 +90,3 @@ class Connector:
         функция удаления не сработает
         """
         pass
-
-
-
-
-if __name__ == '__main__':
-    df = Connector('df.json')
-
-    data_for_file = {'id': 1, 'title': 'tet'}
-
-    df.insert(data_for_file)
-    data_from_file = df.select(dict())
-    assert data_from_file == [data_for_file]
-
-    df.delete({'id':1})
-    data_from_file = df.select(dict())
-    assert data_from_file == []
