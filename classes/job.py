@@ -2,24 +2,20 @@ import json
 
 
 class Vacancy:
-    __slots__ = ('url', 'name_vac', 'company', 'city', 'salary', 'description', 'responsibility')
+    __slots__ = ('url', 'name', 'company', 'salary', 'description')
 
-    def __init__(self, data: dict):
-        self.url = data['url']
-        self.name_vac = data['name_vac']
-        self.company = data['company']
-        self.city = data['city']
-        self.salary = int(data['salary']) # заменил на 'salary_from': path_vacancy.get('payment_from', 0) - д.б. ноль
-        self.description = data['description']
-        self.responsibility = data['responsibility']
+    def __init__(self, url, name, company, salary, description):
+        self.url = url
+        self.name = name
+        self.company = company
+        self.salary = salary
+        self.description = description
 
 
-    def __gt__(self, other):
-        return self.salary > other.salary
-
-
-    def __str__(self):
-        pass
+    def __repr__(self):
+        return f'Наименование вакансии: {self.name}\nРаботодатель: {self.company}\nСсылка на вакансию:' \
+               f' {self.url}\nОписание вакансии: {self.description}\nЗарплата:' \
+               f' {self.salary}\n'
 
 
 class CountMixin:
@@ -27,7 +23,6 @@ class CountMixin:
     def __init__(self, file_name=None):
         self.file_name = file_name
 
-    @property
     def get_count_of_vacancy(self):
         """
         Вернуть количество вакансий от текущего сервиса.

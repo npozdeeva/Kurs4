@@ -1,7 +1,5 @@
 from abc import ABC, abstractmethod
 import requests
-
-
 from classes.connector import Connector
 
 
@@ -33,10 +31,9 @@ class HH(Engine):
             for vacancy in request_hh['items']:
                 vacancies_list_hh.append({
                     "name": vacancy['name'],
-                    "company_name": vacancy['employer']['name'],
+                    "company": vacancy['employer']['name'],
                     "url": vacancy['alternate_url'],
                     "description": vacancy['snippet']['requirement'],
-                    # "remote_work": self._get_remote_work(vacancy.get('schedule', {})),
                     "salary": vacancy['salary'],
                 })
        # print(len(vacancies_list_hh))
