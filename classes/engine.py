@@ -20,9 +20,15 @@ class Engine(ABC):
         connector.insert(vacancies_list)
 
 class HH(Engine):
-    def __init__(self):
-        pass
 
+    @staticmethod
+    def _get_salary(salary_info: dict):
+        if salary_info:
+            if salary_info.get('to'):
+                return salary_info['to']
+            if salary_info.get('from'):
+                return salary_info['from']
+        return 0
 
     def get_request(self, data):
         vacancies_list_hh = []
@@ -34,7 +40,7 @@ class HH(Engine):
                     "company": vacancy['employer']['name'],
                     "url": vacancy['alternate_url'],
                     "description": vacancy['snippet']['requirement'],
-                    "salary": vacancy['salary'],
+                    "salary": self._get_salary(vacancy.get('salary', {})),
                 })
        # print(len(vacancies_list_hh))
         return vacancies_list_hh
