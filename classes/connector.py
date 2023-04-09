@@ -41,10 +41,10 @@ class Connector:
                     assert type(data) == list
                     for item in data:
                         assert type(item["name"]) == str
-                        assert type(item["company_name"]) == str
+                        assert type(item["company"]) == str
                         assert type(item["url"]) == str
-                        assert type(item["remote_work"]) == str
-                        assert type(item["salary"]) == int
+ #                       assert type(item["remote_work"]) == str
+ #                       assert type(item["salary"]) == int
                 except:
                     raise Exception()
             else:
@@ -63,7 +63,7 @@ class Connector:
         with open(self.__data_file, 'w', encoding='utf8') as f:
             json.dump(file_data, f, ensure_ascii=False, indent=4)
 
-    def select(self, query):
+    def select(self, query:dict):
         """
         Выбор данных из файла с применением фильтрации
         query содержит словарь, в котором ключ это поле для
@@ -71,15 +71,16 @@ class Connector:
         {'price': 1000}, должно отфильтровать данные по полю price
         и вернуть все строки, в которых цена 1000
         """
-        search_key, search_value = query.items()[0]
-
+        #search_key, search_value = query.items()[0]
+        result = []
         with open(self.__data_file, 'r', encoding='utf8') as f:
             file_data = json.load(f)
-
-        result = []
+        if not query:
+            return file_data
         for vacancy in file_data:
-            if vacancy[search_key] == search_value:
-                result.append(vacancy)
+            for search_key, search_value in query.vacancies():
+                if vacancy.get(search_key) == search_value:
+                    result.append(vacancy)
         return result
 
 
@@ -89,4 +90,20 @@ class Connector:
         как в методе select. Если в query передан пустой словарь, то
         функция удаления не сработает
         """
-        pass
+        if not query:
+            return
+
+        del_key, del_value = list(query.items())[0]
+
+        with open(self.__data_file, 'r', encoding='utf8') as f:
+            file_data = json.load(f)
+
+        non_del = []
+        for vacancy in file_data:
+            if vacancy[del_key] == del_value:
+                pass
+            else:
+                non_del.append(vacancy)
+
+        with open(self.__data_file, 'w', encoding='utf8') as f:
+            json.dump(non_del, f, ensure_ascii=False, indent=4)
